@@ -62,10 +62,19 @@ public class ContactViewController {
     }
 
     @GetMapping("/contacts/edit")
-    public String editContactForm(@RequestParam String resourceName, Model model, OAuth2AuthenticationToken authentication) {
-        // Ideally, fetch the contact details and add to model
-        model.addAttribute("resourceName", resourceName);
-        return "edit-contact";
+    public String editContactForm(@RequestParam String resourceName, Model model,
+            OAuth2AuthenticationToken authentication) {
+        try {
+            // Fetch the specific contact by resourceName
+            Person contact = contactsService.getContact(authentication, resourceName);
+            model.addAttribute("contact", contact);
+            model.addAttribute("resourceName", resourceName);
+            return "edit-contact";
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Failed to fetch contact: " + e.getMessage());
+            return "error";
+        }
     }
 
     @PostMapping("/contacts/edit")
@@ -75,13 +84,16 @@ public class ContactViewController {
             @RequestParam String givenName,
             @RequestParam String familyName,
             @RequestParam(required = false) String emailAddress,
-            @RequestParam(required = false) String phoneNumber) {
+            @RequestParam(required = false) String phoneNumber,
+            Model model) {
         try {
-            contactsService.updateContact(authentication, resourceName, givenName, familyName, emailAddress, phoneNumber);
+            contactsService.updateContact(authentication, resourceName, givenName, familyName, emailAddress,
+                    phoneNumber);
             return "redirect:/contacts";
-        } catch (IOException | GeneralSecurityException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/error?message=" + e.getMessage();
+            model.addAttribute("error", "Failed to update contact: " + e.getMessage());
+            return "error";
         }
     }
 

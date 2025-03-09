@@ -19,19 +19,23 @@
                             <input type="hidden" name="resourceName" th:value="${resourceName}">
                             <div class="mb-3">
                                 <label for="givenName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="givenName" name="givenName" required>
+                                <input type="text" class="form-control" id="givenName" name="givenName" 
+                                       th:value="${contact.names != null && !contact.names.empty ? contact.names[0].givenName : ''}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="familyName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="familyName" name="familyName" required>
+                                <input type="text" class="form-control" id="familyName" name="familyName" 
+                                       th:value="${contact.names != null && !contact.names.empty ? contact.names[0].familyName : ''}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="emailAddress" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="emailAddress" name="emailAddress">
+                                <input type="email" class="form-control" id="emailAddress" name="emailAddress" 
+                                       th:value="${contact.emailAddresses != null && !contact.emailAddresses.empty ? contact.emailAddresses[0].value : ''}">
                             </div>
                             <div class="mb-3">
                                 <label for="phoneNumber" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+                                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" 
+                                       th:value="${contact.phoneNumbers != null && !contact.phoneNumbers.empty ? contact.phoneNumbers[0].value : ''}">
                             </div>
                             <div class="d-flex justify-content-between">
                                 <a href="/contacts" class="btn btn-secondary">Cancel</a>
