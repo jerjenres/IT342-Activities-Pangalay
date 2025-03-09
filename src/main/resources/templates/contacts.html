@@ -33,11 +33,14 @@
                 <tbody>
                     <tr th:each="contact : ${contacts}">
                         <td>
-                            <span th:if="${not #lists.isEmpty(contact.names)}" 
-                                  th:text="${contact.names[0].givenName + ' ' + contact.names[0].familyName}">
+                            <span th:text="${not #lists.isEmpty(contact.names) ? 
+                                            (contact.names[0].givenName != null ? contact.names[0].givenName : '') + 
+                                            (contact.names[0].familyName != null ? ' ' + contact.names[0].familyName : '') 
+                                            : 'Unnamed Contact'}">
                                 John Doe
                             </span>
                         </td>
+                                               
                         <td>
                             <span th:if="${not #lists.isEmpty(contact.emailAddresses)}" 
                                   th:text="${contact.emailAddresses[0].value}">
